@@ -1,9 +1,9 @@
-package org.engine2.core.model
+package org.engine2.core.model.io
 
 import geotrellis.proj4.CRS
 import geotrellis.raster.CellType
-import geotrellis.spark.{Bounds, LayerId, SpatialKey, TileLayerMetadata}
 import geotrellis.spark.tiling.LayoutDefinition
+import geotrellis.spark.{Bounds, LayerId, SpatialKey, TileLayerMetadata}
 import geotrellis.vector.Extent
 
 // A Image is a list of tileLayerRDD with ImageMetadata
