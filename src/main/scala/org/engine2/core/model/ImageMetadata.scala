@@ -1,24 +1,25 @@
-package org.engine2.core.model.io
+package org.engine2.core.model
 
 import geotrellis.proj4.CRS
-import geotrellis.raster.CellType
-import geotrellis.spark.tiling.LayoutDefinition
-import geotrellis.spark.{Bounds, LayerId, SpatialKey, TileLayerMetadata}
+import geotrellis.raster.{CellType, TileLayout}
+import geotrellis.spark.tiling.{LayoutDefinition, MapKeyTransform}
+import geotrellis.spark.Bounds
 import geotrellis.vector.Extent
 
-// A Image is a list of tileLayerRDD with ImageMetadata
-case class ImageMetadata[Z: Range](
-  id: String,
-  zoomRange: Range,
-  override val cellType: CellType,
-  override val layout: LayoutDefinition,
-  override val extent: Extent,
-  override val crs: CRS,
-  override val bounds: Bounds[SpatialKey]
-) extends TileLayerMetadata[SpatialKey](cellType, layout, extent, crs, bounds) {
+case class ImageMetadata[K](
+  id: ImageId,
+  cellType: CellType,
+  layout: LayoutDefinition,
+  extent: Extent,
+  crs: CRS,
+  bounds: Bounds[K]
+) {
+  def mapTransform: MapKeyTransform = layout.mapTransform
 
-  def layerId(zoom: Int): LayerId = {
-    assert(zoomRange.contains(zoom), s"zoom should be within zoomRange: $zoomRange")
-    LayerId(id, zoom)
-  }
+  def tileLayout: TileLayout = layout.tileLayout
+
+  def layoutExtent: Extent = layout.extent
+
+  def gridBounds = mapTransform(extent)
+
 }
